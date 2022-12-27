@@ -24,7 +24,6 @@ function Login() {
 
     navigate("/guess");
 
-    console.log("jker", result);
     localStorage.setItem("auth", result.token);
   }
 

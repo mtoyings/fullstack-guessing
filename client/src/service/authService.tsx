@@ -47,10 +47,6 @@ function auth(token: string): boolean {
     decoded.role !== "authorized" ||
     d < currentdate
   ) {
-    console.log("role", decoded.role);
-    console.log("email", decoded.email);
-    console.log("d", d);
-
     return false;
   }
 

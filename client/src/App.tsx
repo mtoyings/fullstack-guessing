@@ -27,9 +27,7 @@ const fetcher = (url: string) =>
 
 function App() {
   const { data, mutate } = useSWR<GuessUser>("guess", fetcher);
-  console.log("hhe", data?.Correct);
   var token = "";
-  console.log("init", data?.Guess);
   // app.get('/all', auth, Profile)
 
   const correct = data?.Correct!;

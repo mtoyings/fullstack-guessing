@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useForm } from "@mantine/hooks";
-import {
-  Box,
-  Button,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Box, Button, Text, TextInput } from "@mantine/core";
 import { ENDPOINT, GuessUser } from "../App";
 import { Navigate } from "react-router-dom";
 import auth, { userEmail } from "../service/authService";
@@ -16,16 +11,12 @@ type Props = {
 const MyComponent: React.FC<Props> = ({ isCorrect }) => {
   const [statusText, setstatusText] = useState("");
 
-  console.log("isCorrect", isCorrect);
+  const token = localStorage.getItem("auth")!;
 
-    const token = localStorage.getItem("auth")!;
-    
   if (!auth(token)) {
-    console.log("SHES UNAUTH");
     return <Navigate to="/login" replace />;
   }
 
-  console.log("BELLO");
   const form = useForm({
     initialValues: {
       email: userEmail,
@@ -34,7 +25,6 @@ const MyComponent: React.FC<Props> = ({ isCorrect }) => {
   });
 
   async function userGuessing(values: { username: string; guess: number }) {
-    console.log("Hello", values);
     values = values!;
     values.guess = Number(values.guess);
     const updated = await fetch(`${ENDPOINT}/guess`, {
@@ -44,7 +34,6 @@ const MyComponent: React.FC<Props> = ({ isCorrect }) => {
       },
       body: JSON.stringify(values),
     }).then((r) => r.json());
-    console.log("Test", values);
     form.reset();
 
     const response = await fetch(`${ENDPOINT}/guess`, {
@@ -54,7 +43,6 @@ const MyComponent: React.FC<Props> = ({ isCorrect }) => {
       },
     });
     const result = (await response.json()) as GuessUser;
-    console.log("who", result);
 
     if (result.Correct === false) {
       setstatusText("Try Again");
