@@ -9,43 +9,21 @@ interface MyObj {
   exp: number;
 }
 
-const authUser: MyObj = {
-  email: "tomato@gmail.com",
-  role: "potato",
-  exp: 0,
-};
-
 export var userEmail: string;
 
 function auth(token: string): boolean {
   var decodeda = jwtDecode(token);
   var decoded = jwtDecode(token) as MyObj;
   JSON.stringify(decoded);
-
   userEmail = decoded.email;
-
-  const d = new Date(decoded.exp * 1000);
-  // d = decoded.exp
+  const exp = new Date(decoded.exp * 1000);
 
   var currentdate = new Date();
-  var datetime =
-    "Last Sync: " +
-    currentdate.getDate() +
-    "/" +
-    (currentdate.getMonth() + 1) +
-    "/" +
-    currentdate.getFullYear() +
-    " @ " +
-    currentdate.getHours() +
-    ":" +
-    currentdate.getMinutes() +
-    ":" +
-    currentdate.getSeconds();
 
   if (
-    decoded.email !== "tomato@gmail.com" ||
+    decoded.email !== "test@gmail.com" ||
     decoded.role !== "authorized" ||
-    d < currentdate
+    exp < currentdate
   ) {
     return false;
   }

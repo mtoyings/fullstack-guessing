@@ -16,10 +16,10 @@ type GuessUser struct {
 	Email 		string 	`json: "email"`
 	Guess 		int 	`json: "guess"`
 	Correct 	bool 	`json: "correct"`
+	Answer 		int 	`json: "answer"`
+
 
 }
-
-// var randNum = 0;
 
 type LoginRequest struct {
 	Role	 string
@@ -33,7 +33,6 @@ func main(){
 	app := fiber.New()
 	guessUser := &GuessUser{}
 	loginUser := &LoginRequest{}
-	// var randNum = 0;
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "http://localhost:3000",
@@ -41,7 +40,6 @@ func main(){
 	}))
 
 	app.Get("/healthcheck", func(c *fiber.Ctx) error{
-		// todo := 
 		return c.SendString("OK")
 
 	})
@@ -53,7 +51,7 @@ func main(){
 		}
 		
 		fmt.Println(loginUser.Email)
-		if loginUser.Email != "tomato@gmail.com" || loginUser.Password != "potato" {
+		if loginUser.Email != "test@gmail.com" || loginUser.Password != "abc123" {
 			loginUser.Role = "unauthorized"
 			
 		} else {
@@ -75,6 +73,7 @@ func main(){
 		max := 10
 
 		var randNum = rand.Intn(max - min) + min
+		guessUser.Answer = randNum
 
 		if err := c.BodyParser(guessUser); err != nil {
 			return err

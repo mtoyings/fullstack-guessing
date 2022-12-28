@@ -1,5 +1,5 @@
 import { Button, Box, TextInput, Text, Space } from "@mantine/core";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ENDPOINT } from "../App";
 
@@ -8,8 +8,6 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  var token = "";
-  // const history = useHistory();
 
   async function loginHandler() {
     let item = { email, password };
@@ -24,13 +22,13 @@ function Login() {
 
     navigate("/guess");
 
-    localStorage.setItem("auth", result.token);
+    localStorage.setItem("token", result.token);
   }
 
   return (
     <>
       <Box
-        sx={(theme) => ({
+        sx={() => ({
           padding: "1rem",
           width: "100%",
           maxWidth: "50rem",
@@ -49,10 +47,10 @@ function Login() {
           className="form-control"
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Space h="md" />
+        <Space h="sm" />
 
         <TextInput
-          type="text"
+          type="password"
           placeholder="password"
           className="form-control"
           onChange={(e) => setPassword(e.target.value)}

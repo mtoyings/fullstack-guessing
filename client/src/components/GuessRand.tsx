@@ -1,40 +1,29 @@
 import { useState } from "react";
-import { useForm } from "@mantine/hooks";
-import { Box, Button, Text, TextInput } from "@mantine/core";
+import { Box, Button, Text, TextInput, Space } from "@mantine/core";
 import { ENDPOINT, GuessUser } from "../App";
 import { Navigate } from "react-router-dom";
 import auth, { userEmail } from "../service/authService";
 
-type Props = {
-  isCorrect: boolean;
-};
-const MyComponent: React.FC<Props> = ({ isCorrect }) => {
+const GuessRand = () => {
   const [statusText, setstatusText] = useState("");
-
-  const token = localStorage.getItem("auth")!;
+  const [guess, setGuess] = useState(" ");
+  const token = localStorage.getItem("token")!;
 
   if (!auth(token)) {
     return <Navigate to="/login" replace />;
   }
 
-  const form = useForm({
-    initialValues: {
-      email: userEmail,
-      guess: null,
-    },
-  });
+  async function guessHandler() {
+    const guessNum = Number(guess);
 
-  async function userGuessing(values: { username: string; guess: number }) {
-    values = values!;
-    values.guess = Number(values.guess);
+    let value = { Email: userEmail, Guess: guessNum };
     const updated = await fetch(`${ENDPOINT}/guess`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(value),
     }).then((r) => r.json());
-    form.reset();
 
     const response = await fetch(`${ENDPOINT}/guess`, {
       method: "GET",
@@ -45,7 +34,7 @@ const MyComponent: React.FC<Props> = ({ isCorrect }) => {
     const result = (await response.json()) as GuessUser;
 
     if (result.Correct === false) {
-      setstatusText("Try Again");
+      setstatusText("Incorrect Guess! Correct guess is: " + result.Answer);
     } else {
       setstatusText("Correct Guess");
     }
@@ -54,28 +43,34 @@ const MyComponent: React.FC<Props> = ({ isCorrect }) => {
   return (
     <>
       <Box
-        sx={(theme) => ({
-          padding: "2rem",
+        sx={() => ({
           width: "100%",
-          maxWidth: "40rem",
+          maxWidth: "80rem",
           margin: "0 auto",
         })}
       >
-        <Text size="xl" weight={"bolder"}>
+        <Text size="lg" style={{ width: "290px" }}>
           {statusText}
         </Text>
+        <Space />
 
-        <form onSubmit={form.onSubmit(userGuessing)}>
-          <TextInput
-            mb={12}
-            placeholder="Input your guess"
-            {...form.getInputProps("guess")}
-          />
-          <Button type="submit">Submit Your Guess</Button>
-        </form>
+        <TextInput
+          size="md"
+          style={{ width: "290px" }}
+          type="text"
+          placeholder="Input your guess"
+          className="form-control"
+          onChange={(e) => {
+            setGuess(e.target.value);
+          }}
+        />
+
+        <Space h="sm" />
+
+        <Button onClick={guessHandler}>Submit Your Guess</Button>
       </Box>
     </>
   );
 };
 
-export default MyComponent;
+export default GuessRand;
