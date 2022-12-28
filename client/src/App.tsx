@@ -1,5 +1,4 @@
 import Login from "./components/Login";
-import useSWR from "swr";
 import "./App.css";
 export const ENDPOINT = "http://localhost:9091";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
