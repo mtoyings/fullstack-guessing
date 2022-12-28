@@ -13,12 +13,13 @@ import (
 )
 
 type GuessUser struct {
-	Email 	string 	`json: "email"`
+	Email 		string 	`json: "email"`
 	Guess 		int 	`json: "guess"`
 	Correct 	bool 	`json: "correct"`
 
 }
 
+// var randNum = 0;
 
 type LoginRequest struct {
 	Role	 string
@@ -32,7 +33,7 @@ func main(){
 	app := fiber.New()
 	guessUser := &GuessUser{}
 	loginUser := &LoginRequest{}
-
+	// var randNum = 0;
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "http://localhost:3000",
@@ -72,11 +73,9 @@ func main(){
 
 		min := 0
 		max := 10
-		var randNum = 0
 
-		if guessUser.Correct {
-		randNum = rand.Intn(max - min) + min
-	}
+		var randNum = rand.Intn(max - min) + min
+
 		if err := c.BodyParser(guessUser); err != nil {
 			return err
 		}
@@ -84,13 +83,14 @@ func main(){
 		if guessUser.Guess == randNum {
 			guessUser.Correct = true
 			fmt.Println("Correct Guess")
-		} else {
+					return c.Status(201).JSON(guessUser)
+
+			} else {
 			guessUser.Correct = false
 			fmt.Println("Incorrect Guess, The correct Guess is: " + strconv.Itoa(randNum))
-		}		
-		
-		return c.JSON(guessUser)
+					return c.Status(200).JSON(guessUser)
 
+		}		
 
 	})
 

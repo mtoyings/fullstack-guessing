@@ -78,5 +78,4 @@ const MyComponent: React.FC<Props> = ({ isCorrect }) => {
   );
 };
 
-// export default GuessingTime
 export default MyComponent;
